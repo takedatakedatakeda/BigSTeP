@@ -8,7 +8,7 @@ function y = bs_moving_average(data, width)
 % -- Output
 % y : Result (T x CH)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Make width odd
 if mod(width, 2) == 0

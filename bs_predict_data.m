@@ -9,7 +9,7 @@ function predicted_data = bs_predict_data(T, onset, pattern)
 % -- Output
 % predicted_data : Predicted data (T x CH)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Set parameters
 [N, K, CH] = size(pattern);

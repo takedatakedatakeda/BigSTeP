@@ -1,4 +1,4 @@
-function [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset, E, peak_time)
+function [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset, E, peak_time, minIOI)
 % Middle level in STeP procedure
 %
 % -- Input
@@ -9,12 +9,13 @@ function [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset
 % previous_onset : Onsets estimated in previous loop at top level (Nonset x K)
 % E : Number of repetition to estimate onsets
 % peak_time : Peak time point
+% minIOI : Minimum inter-onset interval
 %
 % -- Output
 % onset : Estimated onsets of spatiotemporal patterns (Nonset x K)
 % error : Power of residual error
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Set values
 T = size(data, 1);
@@ -54,7 +55,7 @@ for ite = 1:E % This loop can be parallelized by using "parfor".
     end
     
     % Bottom level
-    [onset1(:,:,ite), error1(ite,1)] = bs_bottom_level(Y, N, onset_list, initial_onset, peak_time);
+    [onset1(:,:,ite), error1(ite,1)] = bs_bottom_level(Y, N, onset_list, initial_onset, peak_time, minIOI);
 end
 
 % Select the best onsets

@@ -1,7 +1,8 @@
-% Demo program for BigSTeP
-% Estimate spatiotemporal patterns from multi-subject resting-state data
+% Demo program for BigSTeP (Takeda et al., NeuroImage 2019, 203: 116182)
+% BigSteP estimates repetitive spatiotemporal patterns and their onsets 
+% from multi-subject resting-state data.
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 %% Set parameters for this simulation test
 
@@ -9,10 +10,11 @@ clear all
 close all
 
 Nsub = 10;% Number of subjects
-T = 500;% Length of simulated data (can be different across subjects)
+T = 500;% Length of simulated data
 N = 20;% Length of spatiotemporal pattern
 K = 5;% Number of spatiotemporal patterns
 Nonset = 10;% Number of onsets for each spatiotemporal pattern
+minIOI = 20;% Minimum inter-onset interval
 CH = 10;% Number of channels
 SNR = 0;% Signal to noise ratio
 dev = 0.1;% Deviation of subject-specific spatiotemporal patterns from common ones
@@ -20,20 +22,21 @@ dev = 0.1;% Deviation of subject-specific spatiotemporal patterns from common on
 %% Make simulated data
 
 % Set parameters
-parm.T = T;
-parm.N = N;
-parm.K = K;
-parm.Nonset = Nonset;
-parm.CH = CH;
-parm.SNR = SNR;
-parm.dev = dev;
+sim_parm.T = T;
+sim_parm.N = N;
+sim_parm.K = K;
+sim_parm.Nonset = Nonset;
+sim_parm.minIOI =  minIOI;
+sim_parm.CH = CH;
+sim_parm.SNR = SNR;
+sim_parm.dev = dev;
 
 % Make simulated data
 data = cell(1, Nsub);
 onset = cell(1, Nsub);
 spat = cell(1, Nsub);
 for sub = 1:Nsub
-    [data{sub}, onset{sub}, cpat, spat{sub}] = bs_make_simulated_data(parm);
+    [data{sub}, onset{sub}, cpat, spat{sub}] = bs_make_simulated_data(sim_parm);
 end
 
 % Obtain range of values to show
@@ -94,7 +97,8 @@ fprintf('Proportion of overlap is %1.2f.\n', p_overlap)
 %% Apply BigSTeP to simulated data
 
 % Estimate common and subject-specific spatiotemporal patterns
-[e_onset, e_cpat, e_spat, e_onset_step] = bs_BigSTeP(data, N, K);
+STeP_parm.minIOI = minIOI;
+[e_onset, e_cpat, e_spat, e_onset_step] = bs_BigSTeP(data, N, K, STeP_parm);
 
 % Adjust estimated onsets to true ones
 [a_onset, a_cpat] = bs_adjust_onset_to_ref(data, cpat, e_onset, N);

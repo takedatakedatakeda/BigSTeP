@@ -9,7 +9,7 @@ function [nn, nn_each_sub] = bs_calc_normalized_num(t_onset, e_onset)
 % nn : Normalized number of onsets averaged across subjects
 % nn_each_sub : Normalized number of onsets for each subject
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if onsets are not cells
 if ~iscell(t_onset)

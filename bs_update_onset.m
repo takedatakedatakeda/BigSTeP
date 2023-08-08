@@ -11,7 +11,7 @@ function [onset, cpattern, error] = bs_update_onset(data, onset, N)
 % cpattern : Common spatiotemporal patterns (N x K x CH)
 % error : Amount of error
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 disp('Update onsets')
 

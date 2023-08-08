@@ -1,5 +1,5 @@
 function [P, U] = bs_est_P_from_Y(Y, onset, N)
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if Y is not cell
 if ~iscell(Y)

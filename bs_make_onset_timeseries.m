@@ -1,14 +1,14 @@
 function onset_ts = bs_make_onset_timeseries(onset, T)
-% Make onset timeseries using onsets
+% Make onset timeseries using onset times
 %
 % -- Input
-% onset : Onsets of spatiotemporal patterns (Nonset x K) or (1 x Nsub cell array)
+% onset : Onset times of spatiotemporal patterns (Nonset x K) or (1 x Nsub cell array)
 % T : Length of data (Nsub x 1)
 %
 % -- Output
 % onset_ts : Onset timeseries (T x K) or (1 x Nsub cell array)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrix to cell if onset is not cell
 c = 1;

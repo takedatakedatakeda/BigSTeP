@@ -8,6 +8,7 @@ function [data, onset, cpattern, spattern, signal, noise, sd_noise]...
 % .N : Length of spatiotemporal patterns (default = 20)
 % .K : Number of spatiotemporal patterns (default = 5)
 % .Nonset : Number of onsets for each spatiotemporal pattern (default = 25)
+% .minIOI : Minimum inter-onset interval of a pattern (default = 1)
 % .CH : Number of channels (default = 10)
 % .SNR : Signal to noise ratio (default = -5)
 % .dev : Deviation of subject-specific spatiotemporal patterns from common ones (default = 0)
@@ -21,13 +22,14 @@ function [data, onset, cpattern, spattern, signal, noise, sd_noise]...
 % noise : Noise (T x CH) (data = signal + noise)
 % sd_noise: SD of noise
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Default parameters
 T = 1000;% Length of data
 N = 20;% Length of spatiotemporal patterns
 K = 5;% Number of spatiotemporal patterns
 Nonset = 25;% Number of onsets for each spatiotemporal pattern
+minIOI = 1;% Minimum inter-onset interval
 CH = 10;% Number of channels
 SNR = -5;% Signal to noise ratio
 dev = 0;% Deviation of subject-specific spatiotemporal patterns from common ones
@@ -45,6 +47,10 @@ if nargin > 0
     if isfield(parm, 'Nonset')
         Nonset = parm.Nonset;
         fprintf('Number of onsets is set to %4.0f. \n', Nonset)
+    end
+    if isfield(parm, 'minIOI')
+        minIOI = parm.minIOI;
+        fprintf('Minimum inter-onset interval is set to %3.0f. \n', minIOI)
     end
     if isfield(parm, 'CH')
         CH = parm.CH;
@@ -79,7 +85,7 @@ for k = 1:K
 end
 
 % Make onset timeseries
-onset = bs_make_random_onset(Nonset, T, N, K);
+onset = bs_make_random_onset(Nonset, T, N, K, minIOI);
 onset_ts = bs_make_onset_timeseries(onset, T);
 
 % Make signal

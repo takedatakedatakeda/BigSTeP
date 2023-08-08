@@ -1,5 +1,5 @@
 function U = bs_make_U(Y, onset, N)
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Set values
 K = size(onset, 2);

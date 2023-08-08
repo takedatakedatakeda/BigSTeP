@@ -10,7 +10,7 @@ function p_overlap = bs_proportion_of_overlap(T, onset, N)
 % - Output
 %  p_overlap : Proportion of overlap
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrix to cell if onset is not a cell
 if ~iscell(onset)

@@ -10,7 +10,7 @@ function residual_error = bs_residual_error(data, onset, N, pattern)
 % -- Output
 % residual_error : Residual error (T x CH) or (1 x Nsub cell array)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if they are not cells
 c = 1;

@@ -8,7 +8,7 @@ function [r, p] = bs_cc(x, y)
 % r : Correlation coefficient (1 x Nchannel)
 % p : P-value (1 x Nchannel)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Calculate correlation coefficients
 [Nsample, CH] = size(x);

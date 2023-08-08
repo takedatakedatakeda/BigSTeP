@@ -1,7 +1,8 @@
-% Demo program for STeP
-% Estimate spatiotemporal patterns from single-subject resting-state data
+% Demo program for STeP (Takeda et al., NeuroImage 2016, 133: 251-265)
+% STeP estimates repetitive spatiotemporal patterns and their onsets from
+% single-subject resting-state data.
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 %% Set parameters for this simulation test
 
@@ -12,21 +13,23 @@ T = 500;% Length of simulated data
 N = 20;% Length of spatiotemporal pattern
 K = 5;% Number of spatiotemporal patterns
 Nonset = 10;% Number of onsets for each spatiotemporal pattern
+minIOI = 20;% Minimum inter-onset interval
 CH = 10;% Number of channels
 SNR = 0;% Signal to noise ratio
 
 %% Make and show simulated data
 
 % Set parameters
-parm.T = T;
-parm.N = N;
-parm.K = K;
-parm.Nonset = Nonset;
-parm.CH = CH;
-parm.SNR = SNR;
+sim_parm.T = T;
+sim_parm.N = N;
+sim_parm.K = K;
+sim_parm.Nonset = Nonset;
+sim_parm.minIOI =  minIOI;
+sim_parm.CH = CH;
+sim_parm.SNR = SNR;
 
 % Make simulated data
-[data, onset, ~, pattern, signal, noise] = bs_make_simulated_data(parm);
+[data, onset, ~, pattern, signal, noise] = bs_make_simulated_data(sim_parm);
 
 % Show spatiotemporal patterns and their onset timeseries
 figure(1);clf
@@ -83,7 +86,10 @@ xlabel('Time')
 %% Estimate spatiotemporal patterns and their onsets using STeP
 
 % Apply STeP to simulated data
-[e_onset, e_pattern] = bs_STeP(data, N, K);
+STeP_parm.minIOI = minIOI;
+tic
+[e_onset, e_pattern] = bs_STeP(data, N, K, STeP_parm);
+toc 
 
 % Show estimation result
 figure(3);clf
@@ -152,7 +158,7 @@ end
 
 % Correlation coefficient between true and estimated spatiotemporal patterns
 r = bs_accuracy_of_pattern(pattern, a_pattern);
-fprintf('Correlation coefficient is %1.2f.\n', r)
+fprintf('Correlation coefficient between true and estiated patterns is %1.2f.\n', r)
 
 % Normalized distance from true onsets
 nd = bs_calc_normalized_dist(onset, a_onset, T);

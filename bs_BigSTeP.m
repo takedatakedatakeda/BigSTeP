@@ -1,15 +1,19 @@
 function [onset, cpattern, spattern, onset_step] = bs_BigSTeP(data, N, K, STeP_parm)
-% Estimate repetitive spatiotemporal patterns and their onsets from many subjects' resting-state data
+% This program performs SpatioTemporal Pattern estimation from Bigdata (BigSTeP)
+% proposed in Takeda et al., NeuroImage 2019, 203: 116182.
+% BigSTeP estimates repetitive spatiotemporal patterns and their onsets
+% from multi-subject resting-state data.
 %
 % -- Input
 % data : Resting-state data (1 x Nsub cell array)
 % N : Length of spatiotemporal patterns
 % K : Number of spatiotemporal patterns
 % STeP_parm : <Optional> STeP's parameters with following fields
-% .onset_list : Candidate list for onsets
-% .max_count : Maximum value of count
-% .E : Number of repetition to estimate onsets
-% .peak_time : Peak time point
+% .onset_list : Candidate list for onsets (default = whole time points)
+% .max_count : Maximum value of count (default = 3)
+% .E : Number of repetition to estimate onsets (default = 30)
+% .peak_time : Peak time point in a pattern (default = 0; that is, arbitrarily determined)
+% .minIOI : Minimum inter-onset interval of a pattern (default = 1 time point)
 %
 % -- Output
 % onset : Estimated onsets of spatiotemporal patterns (1 x Nsub cell array)
@@ -17,7 +21,7 @@ function [onset, cpattern, spattern, onset_step] = bs_BigSTeP(data, N, K, STeP_p
 % spattern : Estimated subject-specific spatiotemporal patterns (1 x Nsub cell array)
 % onset_step : Onsets estimated by STeP (1 x Nsub cell array)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 start_bigstep = tic;
 fprintf('---------- BigSTeP Start ----------\n')

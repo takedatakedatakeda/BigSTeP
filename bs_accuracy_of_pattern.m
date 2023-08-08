@@ -9,7 +9,7 @@ function [r, r_each_sub] = bs_accuracy_of_pattern(t_pattern, e_pattern)
 % r : Correlation coefficient averaged across subjects
 % r_each_sub : Correlation coefficient for each subject (Nsub x 1)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if they are not cells
 if ~iscell(t_pattern)

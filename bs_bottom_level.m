@@ -1,4 +1,4 @@
-function [onset, error] = bs_bottom_level(Y, N, onset_list, initial_onset, peak_time)
+function [onset, error] = bs_bottom_level(Y, N, onset_list, initial_onset, peak_time, minIOI)
 % Bottom level in STeP procedure
 %
 % -- Input
@@ -7,12 +7,13 @@ function [onset, error] = bs_bottom_level(Y, N, onset_list, initial_onset, peak_
 % onset_list : List of onsets (vector)
 % initial_onset : Initial values for onsets (Nonset x K)
 % peak_time : Peak time point
+% minIOI : Minimum inter-onset interval
 %
 % -- Output
 % onset : Estimated onsets (Nonset x K)
 % error : Power of residual error
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Set values
 [M, K] = size(initial_onset);
@@ -40,18 +41,21 @@ while 1
             % Search for time point when residual error
             % contains target spatiotemporal pattern
             if on == M
-                tlist = [0 onset_list(onset_list > ponset)];
+                ix = find(onset_list > ponset+minIOI-1);
             else
-                tlist = [0 onset_list(onset_list>ponset & onset_list<onset(on+1, k))];
+                ix = find(onset_list>ponset+minIOI-1 & onset_list<onset(on+1, k));
             end
-            r1 = R(tlist(2)-N+1:tlist(end), :);
-            pp = sum(pattern1(:).^2);
-            xy = sum(real(ifft(fft([r1;zeros(N-1,CH)]).*fft([flipud(pattern1); zeros(tlist(end)-tlist(2)+N-1, CH)]))), 2);
-            e = [0; -2*xy(tlist(2:end)-tlist(2)+N)+pp];
-            [~, b] = min(e);
-            
-            % Update target onset
-            onset(on, k) = tlist(b);
+            if ix
+                tlist = [0 onset_list(ix)];
+                r1 = R(tlist(2)-N+1:tlist(end), :);
+                pp = sum(pattern1(:).^2);
+                xy = sum(real(ifft(fft([r1;zeros(N-1,CH)]).*fft([flipud(pattern1); zeros(tlist(end)-tlist(2)+N-1, CH)]))), 2);
+                e = [0; -2*xy(tlist(2:end)-tlist(2)+N)+pp];
+                [~, b] = min(e);
+                onset(on, k) = tlist(b);
+            else
+                onset(on, k) = 0;
+            end
             if onset(on, k) > 0
                 ponset = onset(on, k);
             end

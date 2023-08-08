@@ -10,7 +10,7 @@ function [contribution_ratio, label] = bs_contribution_ratio(data, onset, N)
 % contribution_ratio : Contribution Ratio (1 x K+1)
 % label : Label (1 x K+1)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if data is not cell
 if ~iscell(data)

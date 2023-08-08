@@ -8,7 +8,7 @@ function r = bs_make_random_value(distribution, Nvalue)
 % -- Output
 % r : randome values (Nvalue x 1)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 b = cumsum(distribution)/sum(distribution);
 

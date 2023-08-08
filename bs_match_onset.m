@@ -12,7 +12,7 @@ function [m_onset, m_pattern] = bs_match_onset(data, onset, N, width, Nref)
 % m_onset : Matched onsets (1 x Nsub cell array)
 % m_pattern : Matched spatiotemporal patterns (1 x Nsub cell array)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 disp('Adjust onsets across subjects')
 warning off

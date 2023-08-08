@@ -7,7 +7,7 @@ function q = bs_convert_p2q(p)
 % -- Output
 % q : q-value (Ntest x 1)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 m = length(p);
 [sp, ix] = sort(p);

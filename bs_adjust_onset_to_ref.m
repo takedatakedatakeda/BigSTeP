@@ -14,7 +14,7 @@ function [a_onset, a_pattern, order] = bs_adjust_onset_to_ref(data, r_pattern, o
 % a_pattern : Adjusted spatiotemporal patterns (N x K x CH)
 % order : Order of adjusted spatiotemporal patterns
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Prepare data and values
 if iscell(onset)

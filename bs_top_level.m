@@ -1,4 +1,4 @@
-function [onset, pattern] = bs_top_level(data, N, K, onset_list, max_count, E, peak_time)
+function [onset, pattern] = bs_top_level(data, N, K, onset_list, max_count, E, peak_time, minIOI)
 % Top level in STeP procedure
 %
 % -- Input
@@ -9,12 +9,13 @@ function [onset, pattern] = bs_top_level(data, N, K, onset_list, max_count, E, p
 % max_count : Maximum value of count
 % E : Number of repetition to estimate onsets
 % peak_time : Peak time point
+% minIOI : Minimum inter-onset interval
 %
 % -- Output
 % onset : Estimated onsets of spatiotemporal patterns (Nonset x K)
 % pattern : Estimated spatiotemporal patterns (N x K x CH)
 % 
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 warning off
 
@@ -33,7 +34,7 @@ for M = 2:2:max_M
     
     % Middle level
     start_top = tic;
-    [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset, E, peak_time);
+    [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset, E, peak_time, minIOI);
     fprintf(', Elapsed time=%0.2f sec.\n', toc(start_top))
     
     % Update results

@@ -10,7 +10,7 @@ function [nd, nd_each_sub] = bs_calc_normalized_dist(t_onset, e_onset, T)
 % nd : Normalized distance averaged across subjects
 % nd_each_sub : Normalized distance for each subject
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if onsets are not cells
 if ~iscell(t_onset)

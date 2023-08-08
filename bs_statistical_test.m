@@ -11,7 +11,7 @@ function [q, p] = bs_statistical_test(data, onset, N, Nshuffle)
 % q : q-value (N x K x CH)
 % p : p-value (N x K x CH)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Convert matrices to cells if not 
 if ~iscell(data)

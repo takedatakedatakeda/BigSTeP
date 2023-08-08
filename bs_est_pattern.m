@@ -9,7 +9,7 @@ function pattern = bs_est_pattern(data, onset, N)
 % -- Output
 % pattern : Estimated spatiotemporal patterns (N x K x CH)
 %
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Make data matrix Y
 [Y, onset] = bs_make_Y(data, N, onset);

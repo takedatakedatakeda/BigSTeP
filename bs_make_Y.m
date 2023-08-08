@@ -1,5 +1,5 @@
 function [Y, onset] = bs_make_Y(data, N, onset)
-% Copyright (C) 2019, Yusuke Takeda, ATR, takeda@atr.jp
+% 2023/08/07 Yusuke Takeda
 
 % Make data matrix Y
 if iscell(data)
