@@ -86,9 +86,8 @@ xlabel('Time')
 %% Estimate spatiotemporal patterns and their onsets using STeP
 
 % Apply STeP to simulated data
-STeP_parm.minIOI = minIOI;
 tic
-[e_onset, e_pattern] = bs_STeP(data, N, K, STeP_parm);
+[e_onset, e_pattern] = bs_STeP(data, N, K);
 toc 
 
 % Show estimation result

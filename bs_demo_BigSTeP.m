@@ -2,7 +2,7 @@
 % BigSteP estimates repetitive spatiotemporal patterns and their onsets 
 % from multi-subject resting-state data.
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/09/06 Yusuke Takeda
 
 %% Set parameters for this simulation test
 
@@ -99,6 +99,17 @@ fprintf('Proportion of overlap is %1.2f.\n', p_overlap)
 % Estimate common and subject-specific spatiotemporal patterns
 STeP_parm.minIOI = minIOI;
 [e_onset, e_cpat, e_spat, e_onset_step] = bs_BigSTeP(data, N, K, STeP_parm);
+
+% Check the minimum inter-onset interval of the estimated onsets
+minIOI_e_onset = STeP_parm.minIOI+10;
+for sub = 1:Nsub
+    for k = 1:K
+        tmp = e_onset{sub}(:, k);
+        tmp = tmp(tmp>0);
+        minIOI_e_onset = min([min(diff(tmp)) minIOI_e_onset]);
+    end
+end
+disp(['Minimum IOI of the estimated onsets = ' num2str(minIOI_e_onset)])
 
 % Adjust estimated onsets to true ones
 [a_onset, a_cpat] = bs_adjust_onset_to_ref(data, cpat, e_onset, N);

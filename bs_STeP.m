@@ -1,4 +1,4 @@
-function [onset, pattern] = bs_STeP(data, N, K, parm)
+function [onset, pattern, minIOI] = bs_STeP(data, N, K, parm)
 % This propram performs SpatioTemporal Pattern estimation (STeP) 
 % proposed in Takeda et al., NeuroImage 2016, 133: 251-265.
 % STeP estimates repetitive spatiotemporal patterns and their onsets
@@ -13,13 +13,14 @@ function [onset, pattern] = bs_STeP(data, N, K, parm)
 % .max_count : Maximum value of count (default = 3)
 % .E : Number of repetition to estimate onsets (default = 30)
 % .peak_time : Peak time point in a pattern (default = 0; that is, arbitrarily determined)
-% .minIOI : Minimum inter-onset interval of a pattern (default = 1 time point)
+% .minIOI : Minimum inter-onset interval of a pattern (default = N time point)
 %
 % -- Output
 % onset : Estimated onsets of spatiotemporal patterns (Nonset x K)
 % pattern : Estimated spatiotemporal patterns (N x K x CH)
+% minIOI : Minimum inter-onset interval of a pattern (default = N time point)
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/09/06 Yusuke Takeda
 
 fprintf('----- STeP Start -----\n')
 
@@ -32,7 +33,7 @@ E = 30;% Number of repetition to estimate onsets
 
 % Set values for bottom level
 peak_time = 0;% Peak time point
-minIOI = 1;% Minimum inter-onset interval
+minIOI = N;% Minimum inter-onset interval
 
 % Check input parameters
 if nargin > 3

@@ -15,7 +15,7 @@ function [onset, error] = bs_middle_level(data, N, onset_list, M, previous_onset
 % onset : Estimated onsets of spatiotemporal patterns (Nonset x K)
 % error : Power of residual error
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/07/05 Yusuke Takeda
 
 % Set values
 T = size(data, 1);
@@ -44,13 +44,23 @@ for ite = 1:E % This loop can be parallelized by using "parfor".
     % Generate initial onsets
     initial_onset = zeros(M, K);
     for k = 1:K
-        while 1
-            ix = find(previous_onset(:, k) > 0);
-            on = [previous_onset(ix, k); bs_make_random_value(distribution, M-length(ix))];
-            if length(unique(on)) == length(on)
+        pon = previous_onset(:, k);
+        pon = pon(pon>0);
+        Npon = length(pon);
+        distribution1 = distribution;
+        for o = 1:Npon
+            distribution1(max([pon(o)-minIOI+1 1]):min([pon(o)+minIOI-1 T])) = 0;
+        end
+        new_on = zeros(M-Npon, 1);
+        for o = 1:M-Npon
+            if sum(distribution1) == 0
                 break
+            else
+                new_on(o) = bs_make_random_value(distribution1, 1);
+                distribution1(max([new_on(o)-minIOI+1 1]):min([new_on(o)+minIOI-1 T])) = 0;
             end
         end
+        on = sort([pon; new_on]);
         initial_onset(:, k) = on;
     end
     

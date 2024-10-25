@@ -11,7 +11,7 @@ function [q, p] = bs_statistical_test(data, onset, N, Nshuffle)
 % q : q-value (N x K x CH)
 % p : p-value (N x K x CH)
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/10/10 Yusuke Takeda
 
 % Convert matrices to cells if not 
 if ~iscell(data)
@@ -24,7 +24,7 @@ if ~exist('Nshuffle', 'var')
     Nshuffle = 1000;
 end
 K = size(onset{1}, 2);
-CH = size(data{1}, 2);
+[T, CH] = size(data{1});
 
 % Estimate patterns
 pat = bs_est_pattern(data, onset, N);
@@ -36,7 +36,7 @@ count = pat*0;
 fprintf('Permuting... %4.0f/%4.0f', 0, Nshuffle)
 for shuffle = 1:Nshuffle
     fprintf('\b\b\b\b\b\b\b\b\b%4.0f/%4.0f', shuffle, Nshuffle)
-    sonset = bs_shuffle_ioi(onset);
+    sonset = bs_shuffle_ioi(onset, T);
     spat = bs_est_pattern(data, sonset, N);
     aspat = abs(spat);
     count = count+(aspat >= apat);

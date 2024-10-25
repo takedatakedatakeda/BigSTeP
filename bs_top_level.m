@@ -69,5 +69,5 @@ for k = 1:K
 end
 
 pattern = bs_est_pattern(data, onset, N);
-
+ 
 warning on

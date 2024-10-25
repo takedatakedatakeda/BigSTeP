@@ -21,7 +21,7 @@ function [onset, cpattern, spattern, onset_step] = bs_BigSTeP(data, N, K, STeP_p
 % spattern : Estimated subject-specific spatiotemporal patterns (1 x Nsub cell array)
 % onset_step : Onsets estimated by STeP (1 x Nsub cell array)
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/09/06 Yusuke Takeda
 
 start_bigstep = tic;
 fprintf('---------- BigSTeP Start ----------\n')
@@ -40,13 +40,13 @@ Nsub = length(data);
 onset_step = cell(1, Nsub);
 for sub = 1:Nsub
     disp(['Apply STeP to ' num2str(sub) '-th of ' num2str(Nsub) ' subjects'])
-    onset_step{sub} = bs_STeP(data{sub}, N, K, STeP_parm);
+    [onset_step{sub}, ~, minIOI] = bs_STeP(data{sub}, N, K, STeP_parm);
 end
 
 % Stage 2: Estimate common spatiotemporal patterns
 fprintf('Stage 2: Estimate common spatiotemporal patterns\n')
 m_onset = bs_match_onset(data, onset_step, N);
-[onset, cpattern] = bs_update_onset(data, m_onset, N);
+[onset, cpattern] = bs_update_onset(data, m_onset, N, minIOI);
 
 % Stage 3: Estimate subject-specific spatiotemporal patterns
 fprintf('Stage 3: Estimate subject-specific spatiotemporal patterns\n')

@@ -1,4 +1,4 @@
-function sonset = bs_shuffle_ioi(onset)
+function sonset = bs_shuffle_ioi(onset, T)
 % Make surrogate onsets by shuffling inter-onset intervals (IOI)
 %
 % -- Input
@@ -7,7 +7,7 @@ function sonset = bs_shuffle_ioi(onset)
 % -- Output
 % sonset : IOI-shuffled onsets (Nonset x K) or (1 x Nsub cell array)
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/10/10 Yusuke Takeda
 
 % Convert matrix to cell if onset is not cell
 c = 1;
@@ -19,7 +19,7 @@ end
 % Shuffle IOI
 sonset = onset;
 for sub = 1:length(onset)
-    sonset{sub} = in_each_sub(onset{sub});
+    sonset{sub} = in_each_sub(onset{sub}, T);
 end
 
 % Convert cell to matrix if necessary
@@ -28,17 +28,17 @@ if c == 0
 end
 
 % Inner function to shuffle IOI
-function sonset = in_each_sub(onset)
+function sonset = in_each_sub(onset, T)
 
-onset = sort(onset);
 K = size(onset, 2);
 
 sonset = onset*0;
 for k = 1:K
     ix = find(onset(:, k) > 0);
-    ioi = diff([0; onset(ix, k)]);
+    tmp = unique([0; onset(ix, k); T]);
+    ioi = diff(tmp);
     sioi = bs_rs(ioi);
-    sonset(1:length(ix), k) = cumsum(sioi);
+    sonset(1:length(ix), k) = cumsum(sioi(1:end-1));
 end
 sonset = sort(sonset);
 

@@ -1,17 +1,18 @@
-function [onset, cpattern, error] = bs_update_onset(data, onset, N)
+function [onset, cpattern, error] = bs_update_onset(data, onset, N, minIOI)
 % Update onsets to estimate common spatiotemporal patterns
 %
 % -- Input
 % data : Multi-subject resting-state data (1 x Nsub cell array)
 % onset : Onsets of spatiotemporal patterns (1 x Nsub cell array)
 % N : Length of spatiotemporal patterns
+% minIOI : Minimum inter-onset interval of a pattern (default = N time point)
 %
 % -- Output
 % onset : Updated onsets (1 x Nsub cell array)
 % cpattern : Common spatiotemporal patterns (N x K x CH)
 % error : Amount of error
 %
-% 2023/08/07 Yusuke Takeda
+% 2024/09/06 Yusuke Takeda
 
 disp('Update onsets')
 
@@ -72,18 +73,25 @@ while 1
                     
                     R = bsxfun(@minus, Y{sub}, U{sub}*P);
                     if on == Ms(sub)
-                        tlist = [0 onset_list{sub}(onset_list{sub} > ponsets(sub))];
+                        ix = find(onset_list{sub} > ponsets(sub)+minIOI-1);
+                        %tlist = [0 onset_list{sub}(onset_list{sub} > ponsets(sub))];
                     else
-                        tlist = [0 onset_list{sub}(onset_list{sub} > ponsets(sub) & onset_list{sub} < onset{sub}(on+1,k))];
+                        ix = find(onset_list{sub} > ponsets(sub)+minIOI-1 & onset_list{sub} < onset{sub}(on+1,k));
+                        %tlist = [0 onset_list{sub}(onset_list{sub} > ponsets(sub) & onset_list{sub} < onset{sub}(on+1,k))];
                     end
-                    r1 = R(tlist(2)-N+1:tlist(end), :);
-                    pp = sum(pattern1(:).^2);
-                    xy = sum(real(ifft(fft([r1;zeros(N-1,CH)]).*fft([flipud(pattern1);zeros(tlist(end)-tlist(2)+N-1,CH)]))),2);
-                    e = [0; -2*xy(tlist(2:end)-tlist(2)+N)+pp];
-                    [~, b] = min(e);
-                    
-                    % Update target onset
-                    onset{sub}(on, k) = tlist(b);
+                    if ix
+                        tlist = [0 onset_list{sub}(ix)];
+                        r1 = R(tlist(2)-N+1:tlist(end), :);
+                        pp = sum(pattern1(:).^2);
+                        xy = sum(real(ifft(fft([r1;zeros(N-1,CH)]).*fft([flipud(pattern1);zeros(tlist(end)-tlist(2)+N-1,CH)]))),2);
+                        e = [0; -2*xy(tlist(2:end)-tlist(2)+N)+pp];
+                        [~, b] = min(e);
+                        
+                        % Update target onset
+                        onset{sub}(on, k) = tlist(b);
+                    else
+                        onset{sub}(on, k) = 0;
+                    end
                     if onset{sub}(on, k) > 0
                         ponsets(sub) = onset{sub}(on, k);
                     end
@@ -102,6 +110,13 @@ while 1
     else
         onset2 = onset;
     end
+end
+
+% Sort onsets
+onset = cellfun(@sort, onset, 'uniformoutput', false);
+for sub = 1:Nsub
+    ix = find(sum(onset{sub}, 2)>0);
+    onset{sub} = onset{sub}(ix, :);
 end
 
 % Estimate patterns
